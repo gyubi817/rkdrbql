@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교재 검색기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        form {
+            margin-bottom: 2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"], button {
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 2rem;
+        }
+        .book {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .book h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .book p {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>교재 검색기</h1>
+        <p>문제집과 교과서의 최저가를 찾아보세요</p>
+    </header>
+    
+    <main>
+        <form id="search-form">
+            <label for="search-query">교재를 검색하세요:</label>
+            <input type="text" id="search-query" placeholder="교재 제목 또는 ISBN 입력">
+            <button type="submit">검색</button>
+        </form>
+        
+        <div class="results" id="results">
+            <!-- 검색 결과가 여기에 표시됩니다 -->
+        </div>
+    </main>
+    
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-query').value.trim();
+            if (query) {
+                searchBooks(query);
+            }
+        });
+
+        function searchBooks(query) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = ''; // 이전 결과 지우기
+
+            // 진짜 문제집 데이터 (가상의 데이터 예시)
+            const bookData = [
+                { title: "중학 문제집 수학 1", author: "주식회사 삼성출판사", price: "16,500원", isbn: "978-89-991-0000-2" },
+                { title: "고등 영어 리딩", author: "두산동아", price: "22,000원", isbn: "978-89-800-1234-5" },
+                { title: "초등 국어 문법", author: "교학사", price: "18,000원", isbn: "978-89-365-7890-1" },
+                { title: "사회 문제집", author: "천재교육", price: "25,000원", isbn: "978-89-507-2345-6" },
+                { title: "물리학 개론", author: "넥서스", price: "30,000원", isbn: "978-89-711-9876-5" }
+            ];
+
+            const filteredBooks = bookData.filter(book => 
+                book.title.toLowerCase().includes(query.toLowerCase()) || 
+                book.isbn.includes(query)
+            );
+
+            if (filteredBooks.length === 0) {
+                resultsContainer.innerHTML = '<p>검색 결과가 없습니다.</p>';
+                return;
+            }
+
+            filteredBooks.forEach(book => {
+                const bookElement = document.createElement('div');
+                bookElement.className = 'book';
+                bookElement.innerHTML = `
+                    <h3>${book.title}</h3>
+                    <p><strong>저자:</strong> ${book.author}</p>
+                    <p><strong>가격:</strong> ${book.price}</p>
+                    <p><strong>ISBN:</strong> ${book.isbn}</p>
+                `;
+                resultsContainer.appendChild(bookElement);
+            });
+        }
+    </script>
+</body>
+</html>
